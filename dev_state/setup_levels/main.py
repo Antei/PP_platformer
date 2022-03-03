@@ -16,7 +16,7 @@ while True:
             pygame.quit()
             sys.exit()
 
-        screen.fill((30, 30, 30))  # или 'black'
+        screen.fill('black')  # или например (30, 30, 30)
         lvl.run()
 
         pygame.display.update()
