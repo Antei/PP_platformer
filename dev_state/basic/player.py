@@ -35,7 +35,7 @@ class Player(pygame.sprite.Sprite):
 
     # импорт ассетов персонажа
     def import_character_assets(self):
-        character_path = 'graphics\\character'
+        character_path = 'graphics\\character\\'
         self.animations = {'idle': [], 'run': [], 'jump': [], 'fall': []}
 
         for animation in self.animations.keys():
@@ -44,7 +44,7 @@ class Player(pygame.sprite.Sprite):
 
     # импорт частиц пыли для бега
     def import_dust_run_particles(self):
-        self.dust_run_particles = import_folder('graphics\\character\\run')
+        self.dust_run_particles = import_folder('graphics\\character\\dust_particles\\run')
 
     # настройка анимации персонажа игрока
     def player_animation(self):
