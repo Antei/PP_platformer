@@ -1,13 +1,14 @@
 import pygame, sys
 from settings import *
 from level import Level
+from gamedata import level_0
 
 # шаблон настроек pygame
 pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 pygame.display.set_caption('PP_platformer')
-#lvl = Level(level_data, screen)
+lvl = Level(level_0, screen)
 
 while True:
     for event in pygame.event.get():
@@ -16,7 +17,7 @@ while True:
             sys.exit()
 
         screen.fill((30, 30, 30))  # или 'black'
-#        lvl.run()
+        lvl.run()
 
         pygame.display.update()
         clock.tick(60)
