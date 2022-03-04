@@ -1,9 +1,9 @@
-from re import X
 import pygame
 from support import import_csv_layout, import_cut_tileset  # смотреть комменты в файле
-from settings import tile_size
+from settings import *
 from tiles import *
 from enemy import Enemy
+from decoration import *
 
 class Level:
     # инициализация данных уровня, отображения картинки
@@ -48,7 +48,13 @@ class Level:
 
         # настройка препятствий для врагов
         constraints_layout = import_csv_layout(level_data['constraints'])
-        self.constraints_sprites = self.create_tile_group(constraints_layout, 'constraints')        
+        self.constraints_sprites = self.create_tile_group(constraints_layout, 'constraints')
+
+        # декорации уровня
+        self.sky = Sky(8)
+        level_width = len(terrain_layout[0]) * tile_size
+        self.water = Water(screen_height - 30, level_width)
+        self.clouds = Clouds(400, level_width, 30)
 
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
@@ -121,6 +127,10 @@ class Level:
     # запуск игры
     def run(self):
 
+        # небо
+        self.sky.draw(self.display_surf)
+        self.clouds.draw(self.display_surf, self.move_camera)
+
         # пальмы на заднем плане
         self.bg_palms_sprites.draw(self.display_surf)
         self.bg_palms_sprites.update(self.move_camera)
@@ -156,3 +166,6 @@ class Level:
         # спрайты игрока
         self.goal.draw(self.display_surf)
         self.goal.update(self.move_camera)
+
+        # вода
+        self.water.draw(self.display_surf, self.move_camera)
