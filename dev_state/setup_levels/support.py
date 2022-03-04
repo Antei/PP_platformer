@@ -1,6 +1,18 @@
 import pygame
 from csv import reader
 from settings import tile_size
+from os import walk
+
+# возвращает путь к папке с кадрами анимации
+def import_folder(path):
+    surface_lst = []
+    for _, __, img_files in walk(path):
+        for img in img_files:
+            full_path = path + '/' + img
+            img_surf = pygame.image.load(full_path).convert_alpha()
+            surface_lst.append(img_surf)
+
+    return surface_lst
 
 # возвращает данные из экспортированных в csv данных карты уровня
 def import_csv_layout(path):
@@ -23,7 +35,7 @@ def import_cut_tileset(path):
         for col in range(tile_num_x):
             x = col * tile_size
             y = row * tile_size
-            new_surface = pygame.Surface((tile_size, tile_size))
+            new_surface = pygame.Surface((tile_size, tile_size), flags=pygame.SRCALPHA)  # .SRCALPHA!
             new_surface.blit(surface, (0, 0), pygame.Rect(x, y, tile_size, tile_size))
             cut_tileset.append(new_surface)
 

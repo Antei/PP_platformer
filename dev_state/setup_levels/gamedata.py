@@ -7,4 +7,3 @@ level_0 = {'terrain': 'level_data\\level_0\\level_0_terrain.csv',
            'constraints': 'level_data\\level_0\\level_0_constraints.csv',
            'player': 'level_data\\level_0\\level_0_player.csv',
            'grass': 'level_data\\level_0\\level_0_grass.csv'}
-
