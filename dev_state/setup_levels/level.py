@@ -10,7 +10,13 @@ class Level:
     def __init__(self, level_data, surface):
         # основная настройка
         self.display_surf = surface
-        self.move_camera = 0
+        self.move_camera = -5
+
+        # настройка игрока
+        player_layout = import_csv_layout(level_data['player'])
+        self.player = pygame.sprite.GroupSingle()
+        self.goal = pygame.sprite.GroupSingle()
+        self.player_setup(player_layout)
 
         # настройка окружения terrain
         terrain_layout = import_csv_layout(level_data['terrain'])
@@ -39,6 +45,10 @@ class Level:
         # настройка врагов
         enemies_layout = import_csv_layout(level_data['enemies'])
         self.enemies_sprites = self.create_tile_group(enemies_layout, 'enemies')
+
+        # настройка препятствий для врагов
+        constraints_layout = import_csv_layout(level_data['constraints'])
+        self.constraints_sprites = self.create_tile_group(constraints_layout, 'constraints')        
 
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
@@ -80,10 +90,33 @@ class Level:
 
                     if type == 'enemies':
                         sprite = Enemy(tile_size, x, y)
+
+                    if type == 'constraints':
+                        sprite = Tile(tile_size, x, y)
                     
                     sprite_group.add(sprite)
 
         return sprite_group
+
+    # разворот врагов после коллизии с препятствием-ограничителем
+    def constraints_reverse_enemy(self):
+        for enemy in self.enemies_sprites.sprites():
+            if pygame.sprite.spritecollide(enemy, self.constraints_sprites, False):
+                enemy.reverse_side()
+
+    # настройка игрока
+    def player_setup(self, layout):
+        for row_index, row in enumerate(layout):
+            for value_index, value in enumerate(row):
+                x = value_index * tile_size
+                y = row_index * tile_size
+                if value == '0':
+                    pass
+                    print('player start here')
+                elif value == '1':
+                    hat_surface = pygame.image.load('graphics\\character\\hat.png').convert_alpha()
+                    sprite = StaticTile(tile_size, x, y, hat_surface)
+                    self.goal.add(sprite)
 
     # запуск игры
     def run(self):
@@ -96,13 +129,17 @@ class Level:
         self.terrain_sprites.draw(self.display_surf)
         self.terrain_sprites.update(self.move_camera)
 
-        # враги
-        self.enemies_sprites.draw(self.display_surf)
-        self.enemies_sprites.update(self.move_camera)
-
         # сундуки
         self.crate_sprites.draw(self.display_surf)
         self.crate_sprites.update(self.move_camera)
+
+        # враги
+        # препятствия для врагов
+        # отрисовка через метод draw не нужна
+        self.enemies_sprites.update(self.move_camera)
+        self.constraints_sprites.update(self.move_camera)
+        self.constraints_reverse_enemy()
+        self.enemies_sprites.draw(self.display_surf)
 
         # трава
         self.grass_sprites.draw(self.display_surf)
@@ -115,3 +152,7 @@ class Level:
         # пальмы на переднем плане
         self.fg_palms_sprites.draw(self.display_surf)
         self.fg_palms_sprites.update(self.move_camera)
+
+        # спрайты игрока
+        self.goal.draw(self.display_surf)
+        self.goal.update(self.move_camera)
