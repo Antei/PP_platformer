@@ -18,7 +18,7 @@ class Level:
         self.dust_sprite = pygame.sprite.GroupSingle()
         self.player_on_ground = False
 
-    # вызов анимации частиц пыли при прыжке
+    # вызов анимации частиц пыли
     def jump_dust_particles(self, pos):
         if self.player.sprite.facing_right:
             pos -= pygame.math.Vector2(10, 5)
