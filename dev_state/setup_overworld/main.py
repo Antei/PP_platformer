@@ -1,11 +1,11 @@
 import pygame, sys
+from settings import *
 
 # шаблон настроек pygame
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 pygame.display.set_caption('PP_platformer_overworld')
-#lvl = Level(level_0, screen)
 
 while True:
     for event in pygame.event.get():
@@ -13,8 +13,7 @@ while True:
             pygame.quit()
             sys.exit()
 
-    screen.fill((0, 0, 0))  # или например (30, 30, 30) --RGB или 'grey'
-    #lvl.run()
+    screen.fill((0, 0, 0))  # например (30, 30, 30) или 'grey'
 
     pygame.display.update()
     clock.tick(60)
